@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 
 const GoogleSignInButton = () => {
   const handleGoogleSignIn = () => {
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = 'https://ict-backend-likf.onrender.com/auth/google';
   };
 
   return (

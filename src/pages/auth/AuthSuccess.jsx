@@ -13,7 +13,7 @@ const AuthSuccess = () => {
     const handleGoogleSuccess = async () => {
       try {
         // Fetch user profile after Google login
-        const response = await fetch('http://localhost:3000/api/v1/user/profile', {
+        const response = await fetch('https://ict-backend-likf.onrender.com/api/v1/user/profile', {
           credentials: 'include' // Important for sending cookies
         });
         
