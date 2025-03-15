@@ -1,14 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { COURSE_API } from "@/config/apiConfig";
 
-const COURSE_API = "https://ict-backend-likf.onrender.com/api/v1/course";
+// Create a base query with auth header
+const baseQueryWithAuth = fetchBaseQuery({
+    baseUrl: COURSE_API,
+    credentials: "include",
+    prepareHeaders: (headers) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+        return headers;
+    }
+});
 
 export const courseApi = createApi({
   reducerPath: "courseApi",
   tagTypes: ["Course", "Lecture"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: COURSE_API,
-    credentials: "include",
-  }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     createCourse: builder.mutation({
       query: ({ courseTitle, category }) => ({
@@ -135,8 +144,7 @@ export const courseApi = createApi({
       query: ({ courseId, query }) => ({
         url: `/${courseId}`,
         method: "PATCH",
-        params: { publish: query },
-        credentials: 'include'
+        params: { publish: query }
       }),
       invalidatesTags: (result, error, { courseId }) => [
         { type: 'Course', id: courseId },

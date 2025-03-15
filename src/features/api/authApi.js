@@ -1,7 +1,6 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "../authSlice";
-
-const USER_API = "https://ict-backend-likf.onrender.com/api/v1/user/"
+import { USER_API } from "@/config/apiConfig";
 
 // Create a base query with auth header
 const baseQueryWithAuth = fetchBaseQuery({
@@ -82,7 +81,6 @@ export const authApi = createApi({
                     dispatch(userLoggedIn({user: result.data.user}));
                 } catch (error) {
                     console.error('Load user error:', error);
-                    // If token is invalid, logout the user
                     if (error?.status === 401) {
                         localStorage.removeItem('token');
                         dispatch(userLoggedOut());

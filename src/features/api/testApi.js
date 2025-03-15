@@ -1,14 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { TEST_API } from "@/config/apiConfig";
 
-const TEST_API = "https://ict-backend-likf.onrender.com/api/v1/test";
+// Create a base query with auth header
+const baseQueryWithAuth = fetchBaseQuery({
+    baseUrl: TEST_API,
+    credentials: "include",
+    prepareHeaders: (headers) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+        return headers;
+    }
+});
 
 export const testApi = createApi({
   reducerPath: "testApi",
   tagTypes: ["Tests", "TestResults"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: TEST_API,
-    credentials: "include",
-  }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     createTest: builder.mutation({
       query: (data) => ({

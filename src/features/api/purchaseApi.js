@@ -1,13 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { PURCHASE_API } from "@/config/apiConfig";
 
-const COURSE_PURCHASE_API = "https://ict-backend-likf.onrender.com/api/v1/purchase";
+// Create a base query with auth header
+const baseQueryWithAuth = fetchBaseQuery({
+    baseUrl: PURCHASE_API,
+    credentials: "include",
+    prepareHeaders: (headers) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+        return headers;
+    }
+});
 
 export const purchaseApi = createApi({
   reducerPath: "purchaseApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: COURSE_PURCHASE_API,
-    credentials: "include",
-  }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     createCheckoutSession: builder.mutation({
       query: (courseId) => ({
