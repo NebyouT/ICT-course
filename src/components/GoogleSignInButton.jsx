@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from 'sonner';
+import { API_BASE_URL } from '@/config/apiConfig';
 
 const GoogleSignInButton = () => {
   const handleGoogleSignIn = () => {
@@ -9,8 +10,11 @@ const GoogleSignInButton = () => {
       // Show loading toast
       toast.loading('Redirecting to Google login...');
       
+      // Get the base URL from the API configuration
+      const baseUrl = API_BASE_URL.split('/api/v1')[0];
+      
       // Redirect to the Google authentication endpoint
-      window.location.href = 'https://ict-backend-likf.onrender.com/auth/google';
+      window.location.href = `${baseUrl}/auth/google`;
     } catch (error) {
       console.error('Error redirecting to Google login:', error);
       toast.error('Failed to connect to Google login');

@@ -32,6 +32,7 @@ import AuthFailure from "./pages/auth/AuthFailure";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import NotFound from "./pages/NotFound";
 
 // Create router with future flags enabled
 const router = createBrowserRouter(
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
     {
       path: "/",
       element: <MainLayout />,
+      errorElement: <NotFound />,
       children: [
         {
           path: "/",
@@ -138,14 +140,6 @@ const router = createBrowserRouter(
             </ProtectedRoute>
           ),
         },
-        {
-          path: "/auth/success",
-          element: <AuthSuccess />,
-        },
-        {
-          path: "/auth/failure",
-          element: <AuthFailure />,
-        },
 
         // admin routes start from here
         {
@@ -192,6 +186,20 @@ const router = createBrowserRouter(
         },
       ],
     },
+    // Auth routes outside MainLayout
+    {
+      path: "auth/success",
+      element: <AuthSuccess />,
+    },
+    {
+      path: "auth/failure",
+      element: <AuthFailure />,
+    },
+    // Catch-all route for 404
+    {
+      path: "*",
+      element: <NotFound />,
+    },
   ],
   {
     future: {
@@ -199,19 +207,14 @@ const router = createBrowserRouter(
       v7_relativeSplatPath: true,
       v7_fetcherPersist: true,
       v7_normalizeFormMethod: true,
-      v7_partialHydration: true,
-      v7_prependBasename: true,
-      v7_skipActionErrorRevalidation: true,
     },
   }
 );
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="app-theme">
-      <main>
-        <RouterProvider router={router} />
-      </main>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }

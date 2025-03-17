@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { userLoggedIn } from '@/features/authSlice';
 import SessionManager from '@/utils/sessionManager';
+import { API_BASE_URL } from '@/config/apiConfig';
 
 const AuthSuccess = () => {
   const navigate = useNavigate();
@@ -14,47 +15,47 @@ const AuthSuccess = () => {
     const handleGoogleSuccess = async () => {
       try {
         // Fetch user profile after Google login
-        const response = await fetch('https://ict-backend-likf.onrender.com/api/v1/user/profile', {
-          credentials: 'include', // Important for sending cookies
+        const response = await fetch(`${API_BASE_URL}/user/profile`, {
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json'
           }
         });
-        
+
         if (!response.ok) {
           throw new Error('Failed to get user data');
         }
 
         const data = await response.json();
-        
-        // Save user data in SessionManager
-        if (data.user) {
-          SessionManager.saveSession(data.user);
-          
-          // If token is in the response, save it
-          if (data.token) {
-            SessionManager.saveToken(data.token);
-          }
-          
-          // Update Redux state with user data
-          dispatch(userLoggedIn({ user: data.user }));
-          
-          // Show success message
-          toast.success('Successfully signed in with Google!');
-          
-          // Redirect to home page
-          navigate('/');
-        } else {
+
+        if (!data.user) {
           throw new Error('No user data received');
         }
+
+        // Save user data in SessionManager
+        SessionManager.saveSession(data.user);
+
+        // Update Redux state with user data
+        dispatch(userLoggedIn({ user: data.user }));
+
+        // Show success message
+        toast.success('Successfully signed in with Google!');
+
+        // Redirect to home page
+        navigate('/', { replace: true });
       } catch (error) {
         console.error('Google auth error:', error);
         toast.error('Failed to complete sign in');
-        navigate('/login');
+        navigate('/login', { replace: true });
       }
     };
 
-    handleGoogleSuccess();
+    // Add a small delay to ensure cookie is set
+    const timer = setTimeout(() => {
+      handleGoogleSuccess();
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, [navigate, dispatch]);
 
   return (
