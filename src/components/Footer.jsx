@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { School } from "lucide-react";
+import debreLogo from "../assets/debre.png";
 
 const Footer = () => {
   return (
@@ -11,9 +11,9 @@ const Footer = () => {
             {/* Brand Section */}
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <School className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                <img src={debreLogo} alt="ICT-Course Logo" className="h-8 w-auto" />
                 <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                  E-Learning
+                  
                 </span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -115,7 +115,7 @@ const Footer = () => {
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                © {new Date().getFullYear()} E-Learning. All rights reserved.
+                {new Date().getFullYear()} ICT-Course. All rights reserved.
               </p>
               <div className="flex space-x-6">
                 <Link

@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
+import SessionManager from "@/utils/sessionManager";
 
 const Login = () => {
   const [loginInput, setLoginInput] = useState({
@@ -34,10 +35,25 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await loginUser(loginInput).unwrap();
-      toast.success(response?.message || "Login successful!");
-      navigate("/");
-      window.location.reload();
+      
+      // Explicitly handle token storage
+      if (response?.token) {
+        localStorage.setItem('token', response.token);
+        SessionManager.saveToken(response.token);
+        
+        if (response?.user) {
+          SessionManager.saveSession(response.user);
+        }
+        
+        toast.success(response?.message || "Login successful!");
+        
+        // Navigate without page reload to ensure Redux state is preserved
+        navigate("/");
+      } else {
+        toast.error("No authentication token received from server");
+      }
     } catch (error) {
+      console.error("Login error:", error);
       toast.error(error?.data?.message || "Something went wrong");
     }
   };

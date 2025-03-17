@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { School, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import debreLogo from "../assets/debre.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,9 +29,9 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <School className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+              <img src={debreLogo} alt="ICT-Course Logo" className="h-8 w-auto" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                E-Learning
+                
               </span>
             </Link>
 
@@ -151,9 +152,9 @@ const Navbar = () => {
                   className="flex items-center space-x-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <School className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                  <img src={debreLogo} alt="ICT-Course Logo" className="h-8 w-auto" />
                   <span className="text-xl font-bold text-gray-900 dark:text-white">
-                    E-Learning
+                    ICT-Course
                   </span>
                 </Link>
                 <button

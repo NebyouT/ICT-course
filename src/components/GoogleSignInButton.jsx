@@ -1,10 +1,20 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from 'sonner';
 
 const GoogleSignInButton = () => {
   const handleGoogleSignIn = () => {
-    window.location.href = 'https://ict-backend-likf.onrender.com/auth/google';
+    try {
+      // Show loading toast
+      toast.loading('Redirecting to Google login...');
+      
+      // Redirect to the Google authentication endpoint
+      window.location.href = 'https://ict-backend-likf.onrender.com/auth/google';
+    } catch (error) {
+      console.error('Error redirecting to Google login:', error);
+      toast.error('Failed to connect to Google login');
+    }
   };
 
   return (

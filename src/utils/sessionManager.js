@@ -1,5 +1,6 @@
 // Constants for session management
 const SESSION_KEY = 'user_session';
+const TOKEN_KEY = 'token';
 const SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 class SessionManager {
@@ -36,12 +37,14 @@ class SessionManager {
   // Clear session
   static clearSession() {
     localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(TOKEN_KEY);
   }
 
   // Check if session is valid
   static isSessionValid() {
     const session = this.getSession();
-    return session !== null;
+    const token = localStorage.getItem(TOKEN_KEY);
+    return session !== null && token !== null;
   }
 
   // Generate a unique session ID
@@ -67,6 +70,27 @@ class SessionManager {
   static getUserData() {
     const session = this.getSession();
     return session ? session.user : null;
+  }
+
+  // Get token
+  static getToken() {
+    return localStorage.getItem(TOKEN_KEY);
+  }
+
+  // Save token
+  static saveToken(token) {
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      return true;
+    }
+    return false;
+  }
+
+  // Check if we have a valid authentication setup
+  static hasValidAuth() {
+    const session = this.getSession();
+    const token = this.getToken();
+    return session !== null && token !== null;
   }
 }
 

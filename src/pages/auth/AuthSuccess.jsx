@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { userLoggedIn } from '@/features/authSlice';
+import SessionManager from '@/utils/sessionManager';
 
 const AuthSuccess = () => {
   const navigate = useNavigate();
@@ -14,7 +15,10 @@ const AuthSuccess = () => {
       try {
         // Fetch user profile after Google login
         const response = await fetch('https://ict-backend-likf.onrender.com/api/v1/user/profile', {
-          credentials: 'include' // Important for sending cookies
+          credentials: 'include', // Important for sending cookies
+          headers: {
+            'Content-Type': 'application/json'
+          }
         });
         
         if (!response.ok) {
@@ -23,14 +27,26 @@ const AuthSuccess = () => {
 
         const data = await response.json();
         
-        // Update Redux state with user data
-        dispatch(userLoggedIn({ user: data.user }));
-        
-        // Show success message
-        toast.success('Successfully signed in with Google!');
-        
-        // Redirect to home page
-        navigate('/');
+        // Save user data in SessionManager
+        if (data.user) {
+          SessionManager.saveSession(data.user);
+          
+          // If token is in the response, save it
+          if (data.token) {
+            SessionManager.saveToken(data.token);
+          }
+          
+          // Update Redux state with user data
+          dispatch(userLoggedIn({ user: data.user }));
+          
+          // Show success message
+          toast.success('Successfully signed in with Google!');
+          
+          // Redirect to home page
+          navigate('/');
+        } else {
+          throw new Error('No user data received');
+        }
       } catch (error) {
         console.error('Google auth error:', error);
         toast.error('Failed to complete sign in');
