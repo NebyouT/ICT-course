@@ -13,7 +13,6 @@ const baseQueryWithAuth = fetchBaseQuery({
         }
         headers.set('Content-Type', 'application/json');
         headers.set('Accept', 'application/json');
-        headers.set('Access-Control-Allow-Origin', '*');
         return headers;
     },
     mode: 'cors'
@@ -32,7 +31,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
                 }
                 // Don't set Content-Type for FormData
                 headers.set('Accept', 'application/json');
-                headers.set('Access-Control-Allow-Origin', '*');
                 return headers;
             }
         };
