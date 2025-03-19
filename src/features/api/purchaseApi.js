@@ -34,11 +34,32 @@ export const purchaseApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createCheckoutSession: builder.mutation({
-      query: (courseId) => ({
-        url: "/checkout/create-checkout-session",
-        method: "POST",
-        body: { courseId },
-      }),
+      query: (courseId) => {
+        // Validate courseId
+        if (!courseId) {
+          throw new Error('Course ID is required');
+        }
+        
+        console.log('Creating checkout session for course:', courseId);
+        
+        return {
+          url: "/checkout/create-checkout-session",
+          method: "POST",
+          body: { courseId },
+        };
+      },
+      // Add transformResponse to handle potential errors in the response
+      transformResponse: (response) => {
+        if (!response || !response.url) {
+          console.error('Invalid checkout response:', response);
+        }
+        return response;
+      },
+      // Add transformErrorResponse to better handle errors
+      transformErrorResponse: (response) => {
+        console.error('Checkout error response:', response);
+        return response;
+      }
     }),
     verifyPayment: builder.mutation({
       query: (tx_ref) => ({
