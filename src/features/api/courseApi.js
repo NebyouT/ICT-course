@@ -35,10 +35,11 @@ export const courseApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createCourse: builder.mutation({
-      query: ({ courseTitle, category }) => ({
+      query: (formData) => ({
         url: "",
         method: "POST",
-        body: { courseTitle, category },
+        body: formData,
+        formData: true,
       }),
       invalidatesTags: ["Course"],
     }),

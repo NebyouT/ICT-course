@@ -30,7 +30,12 @@ const AddCourse = () => {
   };
 
   const createCourseHandler = async () => {
-    await createCourse({ courseTitle, category });
+    // Create FormData object
+    const formData = new FormData();
+    formData.append("courseTitle", courseTitle);
+    formData.append("category", category);
+    
+    await createCourse(formData);
   };
 
   // for displaying toast
@@ -39,7 +44,10 @@ const AddCourse = () => {
         toast.success(data?.message || "Course created.");
         navigate("/admin/course");
     }
-  },[isSuccess, error])
+    if(error){
+        toast.error(error?.data?.message || "Failed to create course.");
+    }
+  },[isSuccess, error, data, navigate])
 
   return (
     <div className="flex-1 mx-10">

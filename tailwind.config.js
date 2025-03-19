@@ -29,6 +29,24 @@ export default {
           "0%": { transform: "translateY(20px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" }
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" }
+        },
+        "glitch-1": {
+          "0%, 100%": { transform: "translate(0)" },
+          "20%": { transform: "translate(-2px, 2px)" },
+          "40%": { transform: "translate(-2px, -2px)" },
+          "60%": { transform: "translate(2px, 2px)" },
+          "80%": { transform: "translate(2px, -2px)" }
+        },
+        "glitch-2": {
+          "0%, 100%": { transform: "translate(0)" },
+          "20%": { transform: "translate(2px, -2px)" },
+          "40%": { transform: "translate(2px, 2px)" },
+          "60%": { transform: "translate(-2px, -2px)" },
+          "80%": { transform: "translate(-2px, 2px)" }
+        },
         "spin-slow": {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" }
@@ -40,6 +58,9 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "bounce-in": "bounce-in 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
         "slide-up": "slide-up 0.5s ease-out forwards",
+        "float": "float 3s ease-in-out infinite",
+        "glitch-1": "glitch-1 0.4s ease-in-out infinite",
+        "glitch-2": "glitch-2 0.4s ease-in-out infinite",
         "spin-slow": "spin-slow 20s linear infinite"
       },
       borderRadius: {
