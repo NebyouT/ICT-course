@@ -92,20 +92,37 @@ const CourseTab = () => {
 
   const updateCourseHandler = async () => {
     const formData = new FormData();
-    formData.append("courseTitle", input.courseTitle);
-    formData.append("subTitle", input.subTitle);
-    formData.append("description", input.description);
-    formData.append("category", input.category);
-    formData.append("courseLevel", input.courseLevel);
-    formData.append("coursePrice", input.coursePrice);
+    
+    // Add all text fields
+    formData.append("courseTitle", input.courseTitle || '');
+    formData.append("subTitle", input.subTitle || '');
+    formData.append("description", input.description || '');
+    formData.append("category", input.category || '');
+    formData.append("courseLevel", input.courseLevel || '');
+    formData.append("coursePrice", input.coursePrice || '');
     
     // Only append courseThumbnail if it's a File object
     if (input.courseThumbnail instanceof File) {
       formData.append("courseThumbnail", input.courseThumbnail);
     }
 
+    console.log('FormData contents:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + (pair[0] === 'courseThumbnail' ? 'File object' : pair[1]));
+    }
+
     try {
-      await editCourse({ formData, courseId });
+      const response = await editCourse({ 
+        formData, 
+        courseId 
+      });
+      
+      console.log('Edit course response:', response);
+      
+      if (response.error) {
+        console.error('Edit course error:', response.error);
+        toast.error(response.error?.data?.message || "Failed to update course");
+      }
     } catch (err) {
       console.error("Error updating course:", err);
       toast.error("Failed to update course");

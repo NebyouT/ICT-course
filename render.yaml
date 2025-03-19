@@ -4,6 +4,10 @@ services:
     env: static
     buildCommand: npm run build
     staticPublishPath: ./dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
     routes:
       - type: rewrite
         source: /*

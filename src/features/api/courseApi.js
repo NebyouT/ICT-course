@@ -12,12 +12,41 @@ const baseQueryWithAuth = fetchBaseQuery({
             headers.set('Authorization', `Bearer ${token}`);
         }
         headers.set('Content-Type', 'application/json');
+        headers.set('Accept', 'application/json');
+        headers.set('Access-Control-Allow-Origin', '*');
         return headers;
-    }
+    },
+    mode: 'cors'
 });
 
 // Create a custom base query with retry logic for auth errors
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+    // For FormData requests, ensure we don't set Content-Type (browser will set it with boundary)
+    if (args.formData) {
+        const customArgs = {
+            ...args,
+            prepareHeaders: (headers, { getState }) => {
+                const token = SessionManager.getToken();
+                if (token) {
+                    headers.set('Authorization', `Bearer ${token}`);
+                }
+                // Don't set Content-Type for FormData
+                headers.set('Accept', 'application/json');
+                headers.set('Access-Control-Allow-Origin', '*');
+                return headers;
+            }
+        };
+        let result = await baseQueryWithAuth(customArgs, api, extraOptions);
+        
+        // If we get a 401, log the error for debugging
+        if (result.error && result.error.status === 401) {
+            console.log('Auth error in courseApi:', result.error);
+            console.log('Token present:', !!SessionManager.getToken());
+        }
+        
+        return result;
+    }
+    
     let result = await baseQueryWithAuth(args, api, extraOptions);
     
     // If we get a 401, log the error for debugging
