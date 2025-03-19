@@ -91,6 +91,7 @@ export const courseApi = createApi({
         url: `/${courseId}`,
         method: "PUT",
         body: formData,
+        formData: true,
       }),
       invalidatesTags: (result, error, { courseId }) => [
         { type: 'Course', id: courseId },

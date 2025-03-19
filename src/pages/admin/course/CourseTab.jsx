@@ -98,9 +98,18 @@ const CourseTab = () => {
     formData.append("category", input.category);
     formData.append("courseLevel", input.courseLevel);
     formData.append("coursePrice", input.coursePrice);
-    formData.append("courseThumbnail", input.courseThumbnail);
+    
+    // Only append courseThumbnail if it's a File object
+    if (input.courseThumbnail instanceof File) {
+      formData.append("courseThumbnail", input.courseThumbnail);
+    }
 
-    await editCourse({ formData, courseId });
+    try {
+      await editCourse({ formData, courseId });
+    } catch (err) {
+      console.error("Error updating course:", err);
+      toast.error("Failed to update course");
+    }
   };
 
   const publishStatusHandler = async (action) => {
@@ -136,12 +145,12 @@ const CourseTab = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success(data.message || "Course update.");
+      toast.success(data?.message || "Course updated successfully.");
     }
     if (error) {
-      toast.error(error.data.message || "Failed to update course");
+      toast.error(error?.data?.message || "Failed to update course");
     }
-  }, [isSuccess, error]);
+  }, [isSuccess, error, data]);
 
   if(courseByIdLoading) return <h1>Loading...</h1>
  
